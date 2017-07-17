@@ -1,0 +1,161 @@
+  // it('Modules Builder Section', function() {
+      //   element(by.id('nav-modules')).click();
+      //   helpers.displayHover($('#navModuleBuilder'));
+      //   element(by.id('navModuleBuilderMenu')).isDisplayed();
+      //   element(by.cssContainingText('#navModuleBuilderMenu','Hero')).click();
+      //   //element(by.css('[ui-sref=".moduleList({navbar: true})"]')).click();
+      //   browser.sleep('2000');
+      //   element(by.model('module.module_name')).sendKeys('moduletestingprotractor');
+      //   browser.sleep('2000');
+      //   //element(by.model('module_context.selected')).sendKeys('Promotional');
+      //   element(by.model('module_context.selected')).click();
+
+      //   //expect(span.getAttribute('value')).toBe('Foo123');
+      //   browser.sleep('2000');
+      //   //ui-select-match-text
+      
+      // });
+
+
+var helpers = require('protractor-helpers');
+
+describe('Protractor Ocelot App Testing', function() {
+
+        it('should add a todo', function() {
+          browser.driver.manage().window().maximize();
+          
+          browser.get('https://ocelot2/');     
+          
+          element(by.id("logIn")).click();
+          var inputUsername=element(by.id('inputUsername')).sendKeys('ukiran');
+          expect(inputUsername.getAttribute('value')).toEqual('ukiran');
+          
+          browser.pause(5000);
+          var inputPassword=element(by.id("inputPassword")).sendKeys('affine@1234');              
+          expect(inputPassword.getAttribute('value')).toEqual('affine@1234');
+          
+          element(by.id('tryLogin')).click();
+          // if(event.ctrlKey && event.shiftKey && event.keyCode==73){        
+          //     return true;  //Prevent from ctrl+shift+i
+          // }
+          
+          // chrome.tabs.query({url:'chrome-devtools://*/*'}, function(tabs){
+          //     if (tabs.length > 0){
+          //         browser.pause();
+          //     }
+          // });
+        });
+
+//          it('Should open console', function() {
+// //           var {Cu} = require('chrome');
+// // let { devtools } = Cu.import("resource://gre/modules/devtools/Loader.jsm", {});
+// // let myDOMWindow = Services.wm.getMostRecentWindow('navigator:browser');
+// // let gBrowser = myDOMWindow.gBrowser;
+// // let tt = devtools.TargetFactory.forTab(gBrowser.selectedTab);
+// // gDevTools.showToolbox(tt, "webconsole").then(function(toolbox) {
+// //     let inspector = toolbox.getCurrentPanel();
+// //     console.log('inspector:', inspector);
+
+//         });
+
+
+
+        
+    /*
+      if (this.isRemote) {
+          myDOMWindow.messageManager.sendAsyncMessage("debug:inspect", {}, {
+              node: this.target
+          });
+          inspector.walker.findInspectingNode().then(nodeFront => {
+              inspector.selection.setNodeFront(nodeFront, "browser-context-menu");
+          });
+      } else {
+          inspector.selection.setNode(this.target, "browser-context-menu");
+      }
+//       */
+// });
+
+        //  it('Modules list Section', function() {
+        //   element(by.id('nav-modules')).click();
+        //   element(by.css('[ui-sref=".moduleList({navbar: true})"]')).click();
+          
+        //    expect(browser.getCurrentUrl()).toEqual('https://ocelot2/modules');
+        //    browser.sleep('5000');
+        // });
+
+      
+    
+      //  it('Data Pairing Section', function() {
+      //     element(by.id('nav-content')).click();
+      //     browser.sleep('2000');
+      //     element(by.id('nav-menu-cobuild')).click();          
+      //     expect(browser.getCurrentUrl()).toEqual('https://ocelot2/connections');
+      //     element(by.cssContainingText('.shadowed','Add New Connection')).click();          // 
+      //     element(by.className('modal-lg')).isDisplayed();
+      //     browser.sleep('2000');
+      //     element(by.model('connection.name')).sendKeys('automation data pairing conn do not use');
+      //     element(by.model('CMC.onlyAdvanced')).click();
+      //     element(by.model('contentTable.selected')).click();
+          
+      //     element(by.className('ui-select-choices')).element(by.className('ui-select-choices-group')).element(by.id('ui-select-choices-row-0-')).click();
+      //     browser.sleep('2000');
+      //     element(by.className('nullable')).element(by.className('modprop-ddown')).element(by.className('ui-select-match')).element(by.className('ui-select-toggle')).element(by.className('ui-select-match-text')).click(); 
+            
+      //     browser.sleep('10000');
+       
+      //   });
+
+        // it('Connection Table Section', function() {
+        //   element(by.id('nav-modules')).click();
+        //   browser.sleep('2000');
+          
+        //   //element(by.className('dropdown-menu')).element(by.tagName('li'));
+        //   //findElement(by.css('a[href*="/connectiontables"]')).click();
+        //   element.all(by.css('a[href*="/connectiontables"]')).click();
+        //   //element(by.link('/connectiontables')).click();    
+           
+        //   //element(by.css('["ui-sref=.connectionTables({'+"navbar"+': true})"]')).click();
+        //   expect(browser.getCurrentUrl()).toEqual('https://ocelot2/connectiontables');
+        //   browser.pause();
+        // });
+
+        
+        // it('Admin Section', function() {
+        //   element(by.id('nav-admin-ddown')).click();
+        //   browser.sleep('10000');
+        // });
+
+  
+  // it('Segment Section', function() {
+    
+  //   element(by.id('navbar-main')).isDisplayed();
+  //   element(by.className('nav')).click();
+  //   element(by.className('dropdown-menu')).isDisplayed();
+  //   element(by.css('[ui-sref=".segmentsList({navbar: true})"]')).click();
+  //   browser.pause();
+  //   // element(by.className('dropdown')).click();
+    
+  //   // element(by.className('dropdown-menu')).isDisplayed();
+  //  // element(by.id('navModuleBuilder')).all(by.tagName('li')).last());
+  //   //element(by.css('[ui-sref=".segmentsList({navbar: true})"]')).click();
+  //   //element(by.className('dropdown-menu')).element(by.id('navModuleBuilder')).all(by.tagName('li')).last().click();
+  //   //element(by.css('[ui-sref=".segmentsList({navbar: true})"]')).click();
+  //   //browser.sleep('10000');
+  // });
+     
+  // it('Template Section', function() {
+  //   element(by.id('nav-campaigns')).click();
+  //   // element(by.css('[ui-sref=".templateList({navbar: true})"]')).click();
+  //   browser.sleep('10000');
+  // });
+  //  it('Campaign Section', function() {
+  //   element(by.id('nav-campaigns')).click();
+  //   // element(by.css('[ui-sref=".segmentsList({navbar: true})"]')).click();
+  //   browser.sleep('10000');
+  // });
+  
+
+    
+    // browser.pause();
+
+});
