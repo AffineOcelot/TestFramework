@@ -2,8 +2,8 @@ var LoginPage = function() {
     
     //Constants - could be taken from a test DB for multilevel access test
     const URL = "http://localhost:3000/";
-    const USERNAME = "cdittakavi";
-    const PASSWORD = "expedia@1234";
+    const USERNAME = "ukiran";
+    const PASSWORD = "affine@1234";
     //const LOGIN_OK = "Login Successful";
 
     //Attributes - WebElements of the page

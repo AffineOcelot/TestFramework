@@ -6,10 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Chakri",
+  "author": "Uday",
   "license": "ISC",
   "devDependencies": {
-    "mysql": "^2.13.0",
     "protractor-helpers": "^1.1.0",
     "protractor-jasmine2-html-reporter": "0.0.7"
   }

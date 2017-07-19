@@ -15,11 +15,13 @@ exports.config = {
 
   // Spec patterns are relative to the current working directory when
   // protractor is called.
-  specs: ['testcase1.js'],
+  specs: ['testcases.js'],
+  getPageTimeout: 180000,
+  allScriptsTimeout: 180000,
 
   // Options to be passed to Jasmine.
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 1200000
+    defaultTimeoutInterval: 180000
   },
   onPrepare: function() {
       jasmine.getEnv().addReporter(
