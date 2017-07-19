@@ -1,0 +1,96 @@
+<div>
+    <span class="text-muted list-label pull-right" ng-if="SLC.filtered_MySegments.length > 0">Showing {{SLC.pageStart}} to {{SLC.pageStart+(SLC.filtered_MySegments.length-1)}} of {{SLC.mySegmentsCount}} total</span>
+    <span class="text-muted list-label pull-right" ng-if="SLC.filtered_MySegments.length == 0">Showing no results</span>
+    <table class="table table-striped table-hover segment-table">
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Status</td>
+            <td>
+                <a href="#" ng-click="SLC.mySegments.sortProp = 'CreateDate'; SLC.mySegments.asc = !SLC.mySegments.asc">
+                    Create Date <span class="fa " ng-class="SLC.mySegments.sortProp==='CreateDate'&&!SLC.mySegments.asc ? 'fa-caret-down' : 'fa-caret-up'" ng-if="SLC.mySegments.sortProp==='CreateDate'"></span>
+                </a>
+            </td>
+            <td>Original Author</td>
+            <td>
+                <a href="#" ng-click="SLC.mySegments.sortProp = 'UpdateDate'; SLC.mySegments.asc = !SLC.mySegments.asc">
+                    Last Updated <span class="fa " ng-class="SLC.mySegments.sortProp==='UpdateDate'&&!SLC.mySegments.asc ? 'fa-caret-down' : 'fa-caret-up'" ng-if="SLC.mySegments.sortProp==='UpdateDate'"></span>
+                </a>
+            </td>
+            <td>Updated By</td>
+            <td>Count</td>
+            <td>Actions</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="{{$index}}" ng-repeat="segment in SLC.filtered_MySegments = (SLC.mySegments.data | orderBy:SLC.mySegments.sortProp:SLC.mySegments.asc)">
+          <!-- uib-tooltip={{segment[$index].segmentpreviewhtml}} -->
+            <td>
+              {{segment.SegmentName}}
+                <a ng-if="segment.SegmentHTML" class="pull-right" popover-class="segment-preview-popover" uib-popover-html="segment.SegmentHTML" popover-trigger="mouseenter"><i class="fa fa-picture-o"></i></a>
+            </td>
+            <td>
+              {{SLC.mapSegmentStatuses(segment.SegmentStatusID)}}
+            </td>
+            <td>
+              {{segment.CreateDate | date:'short':'UTC'}}
+            </td>
+            <td>
+              {{segment.OriginalAuthor}}
+            </td>
+            <td>
+              {{segment.UpdateDate | date:'short':'UTC'}}
+            </td>
+            <td>
+              {{segment.UpdatedAuthor}}
+            </td>
+            <td>
+              <span ng-if="segment.CountAvailable">
+                <i class="fa fa-users"></i>&nbsp;{{segment.TotalSegmentCount | number}}&nbsp;-&nbsp;
+                <a ng-if="segment.TotalSegmentCount" href="#" uib-popover-template="SLC.countPopoverURL" popover-trigger="click : outsideClick">Per POS</a>
+              </span>
+              <span ng-if="!segment.CountAvailable">Not yet counted.</span>
+            </td>
+            <td>
+              <div class="dropdown action-dropdown">
+                <button class="btn btn-primary dropdown-toggle shadowed" type="button" id="segmentActionsDropdown-{{$index}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-disabled="actionButtonStatus">
+                  Actions
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="segmentActionsDropdown">
+                  <li>
+                    <a href="/segments/view?id={{segment.SegmentID}}" class="btn-listview-action" >View</a>
+                  </li>
+                  <li ng-if="SLC.getSegmentListPerms('edit', segment.SegmentStatusID)">
+                    <a href="/segments/edit?id={{segment.SegmentID}}" class="btn-listview-action">Edit</a>
+                  </li>
+                  <li>
+                    <a href="#" class="btn-listview-action" ng-click="SLC.getCount(segment.SegmentID)">Get Count</a>
+                  </li>
+                  <li ng-if="SLC.getSegmentListPerms('delete', segment.SegmentStatusID)">
+                    <a href="#" class="btn-listview-action" ng-click="SLC.deleteSegment(segment.SegmentID)">Delete</a>
+                  </li>
+                  <li ng-if="SLC.getSegmentListPerms('publish', segment.SegmentStatusID, segment.TotalSegmentCount)">
+                    <a href="#" class="btn-listview-action" ng-click='SLC.publishSegment(segment)'>Publish</a>
+                  </li>
+                  <li role="separator" class="divider"></li>
+                  <li ng-if="SLC.getSegmentListPerms('mapping', segment.SegmentStatusID)">
+                    <a href="#" class="btn-listview-action" ng-click='SLC.updatePairings(segment)'>Pairings</a>
+                  </li>
+                  <li ng-if="SLC.getSegmentListPerms('usage', segment.SegmentStatusID)">
+                    <a href="#" class="btn-listview-action" ng-click="SLC.getSegmentUsage(segment.SegmentID)">Usage</a>
+                  </li>
+                  <li>
+                    <a href="#" class="btn-listview-action" ui-sref="main.segmentBuilder({method: 'clone', id: segment.SegmentID})">Clone</a>
+                  </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                      <a href="#" ng-click="SLC.openStatusFlow()" class="btn-xs btn-listview-action">Actions Help</a>
+                    </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+</div>

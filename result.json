@@ -1,0 +1,29 @@
+[
+  {
+    "description": "angularjs homepage should greet the named user",
+    "assertions": [
+      {
+        "passed": true
+      }
+    ],
+    "duration": 27935
+  },
+  {
+    "description": "angularjs homepage todo list should list todos",
+    "assertions": [
+      {
+        "passed": true
+      }
+    ],
+    "duration": 4107
+  },
+  {
+    "description": "angularjs homepage todo list should add a todo",
+    "assertions": [
+      {
+        "passed": true
+      }
+    ],
+    "duration": 4342
+  }
+]

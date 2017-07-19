@@ -1,39 +1,32 @@
+// An example configuration file.
 var Jasmine2HtmlReporter = require('protractor-jasmine2-html-reporter');
+
+
 exports.config = {
-  seleniumAddress: 'http://localhost:4444/wd/hub',
-  specs: ['ocelot.js'],
-  jasmineNodeOpts : {
-      showColors: true,
-      defaultTimeoutInterval : 60000
-   },
-  //  multiCapabilities: [{
-  //     'browserName': 'chrome'
-  //   }, 
-    //{
-    //   'browserName': 'firefox'
-    // },{
-    //     'browserName': 'internet explorer'
-    // }],
-     
-   onPrepare: function() {
+  directConnect: true,
+
+  // Capabilities to be passed to the webdriver instance.
+  capabilities: {
+    'browserName': 'chrome'
+  },
+
+  // Framework to use. Jasmine is recommended.
+  framework: 'jasmine',
+
+  // Spec patterns are relative to the current working directory when
+  // protractor is called.
+  specs: ['testcase1.js'],
+
+  // Options to be passed to Jasmine.
+  jasmineNodeOpts: {
+    defaultTimeoutInterval: 1200000
+  },
+  onPrepare: function() {
       jasmine.getEnv().addReporter(
         new Jasmine2HtmlReporter({
-          savePath: 'target/screenshots',
-          screenshotsFolder: 'images'
+          savePath: 'target/screenshots'
         })
       );
-     
    }
- 
-   
-    // server: '10.23.18.135',
-    // database: 'Orchestration',
-    // user: 'occuser',
-    // password: 'Exp3dia22',
-    // port: 1433,
-    // options: {
-    //     instanceName: 'DBinstance',
-    //     encrypt: true
-    // }
- // resultJsonOutputFile:'./testResults.json'
+  //resultJsonOutputFile:'./result.json',
 };
