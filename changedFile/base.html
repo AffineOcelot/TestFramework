@@ -1,0 +1,146 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en" ng-app="emailAutomatorApp" ui-router-styles>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title ng-bind="($title || 'Home')">Ocelot</title>
+  <base href="/">
+  <script src="./fallback.min.js" type="text/javascript"></script>
+  <!-- SCRIPT TO LOAD ALL STATIC RESOURCES WITH FALLBACKS -->
+  <script type="text/javascript">
+    fallback.load({
+      yeti: ['https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/yeti/bootstrap.min.css', './yeti.min.css'],
+      fontAwesome: ['https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
+      './font-awesome.css'],
+      spectrum: ['./spectrum.css'],
+      select: ['./select.css'], //There is no CDN for this
+      select2: ['https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.min.css', './select2.css'],
+      flags: ['./flags-dropdown.css'], //There is no CDN for this
+      angularUIMultiselect: ['./angular-ui-multiselect.css'],
+      angularWizard: ['https://cdn.jsdelivr.net/angular.wizard/latest/angular-wizard.min.css'],
+      resizableCSS: ['./angular-resizable.min.css'],
+      xlsx: ['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.9.10/xlsx.full.min.js'], //For parsing excel files and stuff for Variants
+      // ngTagsStyling: ['https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.css', './ng-tags-input.min.css'],
+      // ngTagsBootstrapStyling: ['https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.bootstrap.min.css', './ng-tags-input.bootstrap.min.css'],
+      allStyle: ['./mondoStylesheet.css?v=2.13.1'],
+      bundle: ['./bundle.js?v=2.13.1'],
+      d3: ['https://d3js.org/d3.v4.min.js', './lib/d3.min.js']
+      // resizableJS: ['./angular-resizable.min.js']
+    }, {
+      callback: function (success, failed) {
+        if (success) {
+          console.log('Static resources loaded successfully!');
+        } else if (failed) {
+          console.log('The following resources were unable to be loaded:', failed);
+        }
+      }
+    })
+
+  </script>
+  <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" /> -->
+  <!-- <link rel="stylesheet" href="./bootstrap.css"/> -->
+
+  <!-- Yeti Bootswatch theme -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/yeti/bootstrap.min.css"/> -->
+  <!-- <link rel="stylesheet" href="./yeti.min.css"/> -->
+
+  <!-- Font awesome icons -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+  <!-- <link rel="stylesheet" href="./font-awesome.css"/> -->
+
+  <!-- Spectrum color picker -->
+  <!-- <link rel="stylesheet" href="http://bgrins.github.io/spectrum/spectrum.css"/> -->
+  <!-- <link rel="stylesheet" href="./spectrum.css"/> -->
+
+  <!-- angular-ui-select styles -->
+  <!-- <link rel="stylesheet" href="./select.css"/> -->
+  <!-- <link rel="stylesheet" href="./select2.css"/> -->
+  <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.min.css"> -->
+
+  <!-- Pretty flags corresponding to locale countries -->
+  <!-- <link rel="stylesheet" href="./flags-dropdown.css"/> -->
+
+  <!--long2know multiselect styles -->
+  <!-- <link rel="stylesheet" href="./angular-ui-multiselect.css"/> -->
+
+  <!-- <link rel="stylesheet" type="text/css" href="./createTerms.css"/> -->
+  <!-- <link rel="stylesheet" type="text/css" href="./moduleList.css"/> -->
+  <!-- <link rel="stylesheet" type="text/css" href="./campaignList.css"/> -->
+  <!-- <link rel="stylesheet" type="text/css" href="./activityList.css"/> -->
+  <!-- <link rel="stylesheet" type="text/css" href="./moduleBuilder.css"/> -->
+  <!-- <link rel="stylesheet" type="text/css" href="./campaignBuilder.css"/> -->
+  <!-- <link rel="stylesheet" type="text/css" href="./templateBuilder.css"/>  -->
+  <!-- <link rel="stylesheet" type="text/css" href="./segmentBuilder.css"/>    -->
+  <!-- <link rel="stylesheet" type="text/css" href="./scheduleBuilder.css"/>  -->
+  <!-- <link rel="stylesheet" type="text/css" href="./suppressionList.css"/>  -->
+
+  <!-- <link rel="stylesheet" type="text/css" href="./mondoStylesheet.css?v=1.16.0"/>  -->
+
+  <!-- <link rel="stylesheet" type="text/css" href="./module-properties.css"/> -->
+
+
+</head>
+<body>
+  <style>
+    .dropbtn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+  }
+  .dropbtn:hover, .dropbtn:focus {
+      background-color: #3e8e41;
+  }
+  .dropdown {
+      position: relative;
+      display: inline-block;
+  }
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      overflow: auto;
+      /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
+      /*display: block; inline only */
+      top: 60px;
+      left: 0px;
+  }
+  .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+  }
+  .dropdown a:hover {background-color: #f1f1f1}
+  .show {display:block;}
+  .dropdown-submenu {
+    position: relative;
+  }
+  .dropdown-submenu .dropdown-menu {
+      top: 0;
+      left: 100%;
+      margin-top: -1px;
+  }
+  #navModuleBuilder:hover #navModuleBuilderMenu{
+    display:block;
+  }
+  #navAudience:hover #navAudienceMenu{
+    display:block;
+  }
+  /* from my email-test-suite log file styling */
+  .detailsLink { text-decoration:underline; color:#0275d8; }
+    </style>
+
+  <div style="height: 100%;" ui-view></div>
+
+  <!-- <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.2.js'></script> -->
+  <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> need responsive nav bar collapse-->
+ <!--  <script type='text/javascript' src="http://bgrins.github.com/spectrum/spectrum.js"></script> -->
+<!-- <script src="https://rawgit.com/airbnb/polyglot.js/master/build/polyglot.min.js"></script> -->
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid navbar-container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a ui-sref="main.home" class="navbar-brand"><img src="https://images.trvl-media.com/media/content/expus/graphics/gmt/101515_exp_globe.png" width="35px" hspace="10"/><span>Ocelot</span></a>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar-main" aria-expanded="false" style="height: 1px;">
+      <ul class="nav navbar-nav">
+        <!-- <li><a ui-sref=".home">Home</a></li> -->
+
+        <!-- ===== START Modules ===== -->
+        <li class="dropdown" ng-if="userPerms.modulePerms > 0 && userPerms.modulePerms !== 6">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="nav-modules" role="button" aria-expanded="false">Modules <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" id="nav-menu-mlist" ui-sref=".moduleList({navbar: true})">Module List</a></li>
+            <li class="dropdown-submenu" id="navModuleBuilder" ng-if="userPerms.modulePerms > 0 && userPerms.modulePerms < 6"><a href="#" >Module Builder <span class="fa fa-caret-right"></span></a>
+              <ul class="dropdown-menu" role="menu" id="navModuleBuilderMenu">
+                <li><a href="#" id="nav-menu-mbody" ui-sref=".createModule({type: 'hero'})">Hero</a></li>
+                <!-- <li><a href="#" id="nav-menu-mbody" ng-click="createModule('sub-hero')">Sub-Hero</a></li> -->
+                <li><a href="#" id="nav-menu-mbody" ng-click="createModule('banner')">Banner</a></li>
+                <li><a href="#" id="nav-menu-msubject" ng-click="createModule('subject')">Subject</a></li>
+                <li><a href="#" id="nav-menu-mterms" ng-click="createModule('terms')">Terms</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <!-- ===== END Modules ===== -->
+        <!-- ===== START Campaigns ===== -->
+        <li class="dropdown" ng-if="userPerms.campaignPerms > 1">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="nav-campaigns" role="button" aria-expanded="false">Campaigns <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" id="nav-menu-clist" ui-sref=".campaigns({'navbar': true})">Campaign List</a></li>
+            <li><a href="#" id="nav-menu-cbuild" ui-sref=".createCampaign({method: 'create', 'navbar':true})">Campaign Builder</a></li>
+            <li><a href="#" id="nav-menu-csuppress" ui-sref=".suppressionList({'navbar': true})">Campaign Suppression</a></li>
+            <li><a id="nav-menu-ttables" ui-sref=".timetableList({navbar: true})" ng-if="userPerms.campaignPerms > 1">Timetables</a></li>
+            <li class="dropdown-submenu" id="navModuleBuilder"><a href="#" >Templates <span class="fa fa-caret-right"></span></a>
+              <ul class="dropdown-menu" role="menu" id="navModuleBuilderMenu">
+                <li><a href="#" id="nav-menu-cbuild" ui-sref=".newTemplateBuilder({method: 'create', 'navbar':true, 'template_id': null})">Template Builder</a></li>
+                <li><a href="#" id="nav-menu-slist" ui-sref=".templateList({navbar: true})">Template List</a></li>
+              </ul>
+            </li>
+            <li class="dropdown-submenu" id="navAudience"><a href="#" >Audiences <span class="fa fa-caret-right"></span></a>
+              <ul class="dropdown-menu" role="menu" id="navAudienceMenu">
+                <li><a id="nav-menu-abody" href="/segments/create">Segment Builder</a></li>
+                <li><a href="#" id="nav-menu-slist" ui-sref=".segmentsList({navbar: true})">Segment List</a></li>
+                <!-- <li><a href="#" id="nav-menu-aupload" ui-sref=".audienceFileUpload" ng-if="userPerms.toolPerms >= 2">Upload File</a></li> -->
+                <!-- <li><a href="#" id="nav-menu-agenerate" ui-sref=".generateAudienceFile" ng-if="userPerms.toolPerms >= 2">Export File</a></li> -->
+              </ul>
+            </li>
+<!--             <li>
+                <a id="nav-menu-creporting" href="/reporting">Reporting</a>
+            </li> -->
+          </ul>
+        </li>
+        <!-- ===== START Content ====== -->
+        <li class="dropdown" ng-if="userPerms.modulePerms > 0 && userPerms.modulePerms < 6">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="nav-content" role="button" aria-expanded="false">Data <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <!-- <li><a href="#" id="nav-menu-sbuild" ui-sref=".newTemplateBuilder({method: 'create', campaign_id:null, template_id:null})">Alpha Template</a></li> -->
+            <!-- <li><a href="#" id="nav-menu-plist" ui-sref=".pairingList">Segment Mapping</a></li> -->
+            <li><a href="#" id="nav-menu-cobuild" ui-sref=".connectionBuilder({'navbar': true})">Data Pairing</a></li>
+            <li><a href="#" id="nav-menu-cobuild" ui-sref=".connectionTables({'navbar': true})">Mis Tables</a></li>
+            <li class="dropdown-submenu" id="navModuleBuilder"><a href="#">Tests <span class="fa fa-caret-right"></span></a>
+              <ul class="dropdown-menu" role="menu" id="navModuleBuilderMenu">
+                <li><a id="nav-menu-tcreate" ui-sref=".testBuilder({method: 'create', id: undefined, navbar: true})">Test Builder</a></li>
+                <li><a id="nav-menu-tlist" ui-sref=".testList({navbar: true})">Test List</a></li>
+              </ul>
+            </li>
+            <li><a href="#" id="nav-menu-ilist" ui-sref=".imageList({navbar: true})">Image List</a></li>
+          </ul>
+        </li>
+
+        <!-- ===== START Administration ====== -->
+        <li class="dropdown" ng-if="userPerms.toolPerms > 0">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="nav-admin-ddown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a id="nav-menu-alog" ui-sref=".activity({navbar: true})">Activity Log</a></li>
+            <li><a id="nav-menu-admin" ui-sref=".adminTools({navbar: true})" ng-if="userPerms.toolPerms == 4">Admin Console</a></li>
+          </ul>
+        </li>
+
+
+        <!-- ========= START SUBMIT FEEDBACK ======== -->
+<!--         <li class="dropdown" ng-if="userPerms.toolPerms > 0">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="nav-admin-ddown" role="button" aria-expanded="false">Submit Feedback <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a target="_blank" ng-href='https://jira.sea.corp.expecn.com/jira/secure/CreateIssueDetails!init.jspa?pid=14805&issuetype=12800&summary=EA:%20{ADD%20TITLE}&customfield_13535=29840&customfield_15532=Please%20add%20detailed%20requirements%20here&assignee=aghadge&components=29902'> Tool Feedback</a></li>
+            <li><a target="_blank" ng-href='https://jira.sea.corp.expecn.com/jira/secure/CreateSubTaskIssue.jspa?parentIssueId={{feedback_parentid}}&pid=14805&issuetype=5'> Report an issue</a></li>
+            <li><a target="_blank" ng-href='https://jira.sea.corp.expecn.com/jira/secure/CreateSubTaskIssue.jspa?parentIssueId={{feedback_parentid}}&pid=14805&issuetype=5'> Campaign Support</a></li>
+          </ul>
+        </li>  -->
+<!--         <li>
+          <a href="#" ng-click="toggleButtonStatus()">Toggle Working</a>
+        </li>
+        <li><a href="#">{{actionButtonStatus}}</a></li> -->
+
+<!--         <li class="dropdown" ng-if="userPerms && userPerms.toolPerms >= 3">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="nav-modules" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" id="navAdminMenu">
+            <li><a href="#" ui-sref=".userList">Users</a></li>
+          </ul>
+        </li> -->
+        <!-- comment out for demos!! -->
+        <!-- Use this just for dev convenience -->
+        <!-- <li><a ui-sref=".createDND">Module Builder</a></li> -->
+      </ul>
+    <!-- also worth looking at : https://getbootstrap.com/examples/signin/ -->
+    <!-- bs3 responsive sign in in nav bar https://getbootstrap.com/examples/jumbotron/ -->
+    <!-- <ul> -->
+    <!-- <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sign In</a>
+        <ul class="">
+        </ul> -->
+
+      <div ui-view="loginfo"></div>
+
+      <div class="cachenotification dropdown nav navbar-inverse navbar-right ng-scope" ng-hide="cacheStore == undefined || cacheStore.length == 0">
+        <div class="dropdown-toggle" data-toggle="dropdown">
+          <i class="fa fa-bell cacheicon" aria-hidden="true"></i>
+          <span class="button_badge">{{cacheStore.length}}</span>
+        </div>
+        <ul class="dropdown-menu">
+          <li ng-repeat="cache in cacheStore" ng-click="onCacheSelection(cache)"><a href="#">{{cache.label}}</a></li>
+        </ul>
+      </div>
+     <!--  <li class="iblock fleft "><a ng-click="Login()">Sign In</a></li>
+      <li class="iblock fleft"><a>{{username}}</a></li>
+      <li class="iblock fleft"><a ng-click="Logout()">Sign Out</a></li>-->
+   <!--  </li>
+    </ul> -->
+    <span style="clear: both;"></span>
+
+  </div>
+  <ui-breadcrumbs></ui-breadcrumbs>
+</nav>
+<div class="container-fluid" style="height: 100%;padding-top: 15px;">
+  <div ng-if="!stateIsLoading" class="row" style="height: 100%;" ui-view></div>
+  <div ng-if="stateIsLoading" class="loader" style="text-align: center;"><i class="fa fa-spinner fa-pulse"></i> Loading...</div>
+</div>

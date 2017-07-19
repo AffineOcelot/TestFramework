@@ -155,16 +155,16 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="segmentActionsDropdown">
                   <li>
-                    <a href="/segments/view?id={{segment.SegmentID}}" id="listView-{{segment.SegmentID}}" class="btn-listview-action" >View</a>
+                    <a href="/segments/view?id={{segment.SegmentID}}" id="listView-{{$index}}" class="btn-listview-action" >View</a>
                   </li>
                   <li ng-if="SLC.getSegmentListPerms('edit', segment.SegmentStatusID)">
-                    <a href="/segments/edit?id={{segment.SegmentID}}" id="listEdit-{{segment.SegmentID}}" class="btn-listview-action">Edit</a>
+                    <a href="/segments/edit?id={{segment.SegmentID}}" id="listEdit-{{$index}}" class="btn-listview-action">Edit</a>
                   </li>
                   <li>
-                    <a href="#" class="btn-listview-action" ng-click="SLC.getCount(segment.SegmentID)" id="getCount-{{segment.SegmentID}}">Get Count</a>
+                    <a href="#" class="btn-listview-action" ng-click="SLC.getCount(segment.SegmentID)" id="getCount-{{$index}}">Get Count</a>
                   </li>
                   <li ng-if="SLC.getSegmentListPerms('delete', segment.SegmentStatusID)">
-                    <a href="#" class="btn-listview-action" ng-click="SLC.deleteSegment(segment.SegmentID)" id="deleteSeg-{{segment.SegmentID}}">Delete</a>
+                    <a href="#" class="btn-listview-action" ng-click="SLC.deleteSegment(segment.SegmentID)" id="deleteSeg-{{$index}}">Delete</a>
                   </li>
                   <li ng-if="SLC.getSegmentListPerms('publish', segment.SegmentStatusID, segment.TotalSegmentCount)">
                     <a href="#" class="btn-listview-action" ng-click='SLC.publishSegment(segment)'>Publish</a>

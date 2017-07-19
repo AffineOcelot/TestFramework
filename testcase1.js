@@ -30,25 +30,25 @@ describe('Ocelot login', function() {
         	loginPage.login();
         });
 
-        it('should open module list page',function(){
-
-        	moduleList.listModule();
-        });
-
-        it('should open module builder subject page',function(){
-        	dataPairing.buildSubject();
-        });
-
-        it('should open module builder page',function(){
-        	moduleBuilder.buildHero();
-        });
-
-	  	 	it('should navigate to template builder section', function() {
-	  	 		templateBuilder.buildTemplate();
-        });
+        // it('should open module list page',function(){
+				//
+        // 	moduleList.listModule();
+        // });
+				//
+        // it('should open module builder subject page',function(){
+        // 	dataPairing.buildSubject();
+        // });
+				//
+        // it('should open module builder page',function(){
+        // 	moduleBuilder.buildHero();
+        // });
+				//
+				//  	it('should navigate to template builder section', function() {
+				//  		templateBuilder.buildTemplate();
+        // });
 
 				it('should navigate to Segment builder section', function() {
-	  	 		segmentBuilder.segmentBuilderTemplate();
+				 		segmentBuilder.segmentBuilderTemplate();
         });
 
 				it('should navigate to segment list section', function() {
