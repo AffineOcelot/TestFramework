@@ -17,13 +17,12 @@ function makeid( text ) {
 
 
 var segmentBuilder = function(text){
-
 	this.segmentBuilderTemplate = function(text){
 		var textGen = makeid();
 		element(by.id('nav-campaigns')).click();
 		helpers.displayHover($('#navAudience'));
 		element(by.cssContainingText('#nav-menu-abody','Segment Builder')).click();
-		browser.sleep("10000")
+		browser.sleep("12000")
 		//expect(browser.getCurrentUrl());
 		element(by.model('models.dropzones.modelObjProps.segmentTitle')).sendKeys('NotForUse-'+textGen);
 		element(by.className('ui-select-search')).click();
