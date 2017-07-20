@@ -7,6 +7,7 @@ var DataPairing = require("./dataPairing");
 var ConnectionTables = require("./connectionTables");
 var SegmentBuilder = require("./segmentBuilder");
 var SegmentList = require("./segmentList");
+var CampaignBuilder = require("./campaignBuilder");
 
 
 var loginPage = new LoginPage();
@@ -18,6 +19,7 @@ var dataPairing = new DataPairing();
 var connectionTables = new ConnectionTables();
 var segmentBuilder = new SegmentBuilder();
 var segmentList = new SegmentList();
+var campaignBuilder = new CampaignBuilder();
 var helpers = require('protractor-helpers');
 console.log(loginPage);
 
@@ -47,12 +49,16 @@ describe('Ocelot login', function() {
 				//  		templateBuilder.buildTemplate();
         // });
 
-				it('should navigate to Segment builder section', function() {
-				 		segmentBuilder.segmentBuilderTemplate();
-        });
+				// it('should navigate to Segment builder section', function() {
+				//  		segmentBuilder.segmentBuilderTemplate();
+        // });
+				//
+				// it('should navigate to segment list section', function() {
+				//  		segmentList.segmentListTemplate();
+        // });
 
-				it('should navigate to segment list section', function() {
-	  	 		segmentList.segmentListTemplate();
+				it('should navigate to create campaign builder section', function() {
+	  	 		campaignBuilder.campaignBuilderTemplate();
         });
     });
 });

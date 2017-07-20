@@ -1,0 +1,405 @@
+<div class="row nogutter">
+<!-- === START Search Bar + Filter Buttons === -->
+  <div id="searchbar-container" class="col-xs-12">
+    <div class="form-group">
+      <div class="input-group">
+        <a class="input-group-addon dropdown-toggle" id="show-filters" uib-tooltip="Show search/filter options" tooltip-popup-delay="500" data-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-search"></i>
+          <i class="fa caret-down" ng-class="showFilterOptions? ' fa fa-caret-up' : 'fa fa-caret-down'"></i>
+        </a>
+        <ul class="dropdown-menu list-filters-menu">
+          <li class="list-filter-item" ng-repeat="prop in itemProperties">
+            <a ng-click="prop.selected = !prop.selected; updateSearchbarPlaceholder();"><i class="fa fa-check" ng-show="prop.selected">&nbsp;</i>{{prop.label}}</a>
+          </li>
+        </ul>
+        <input type="text" class="form-control input-sm" placeholder="{{searchbarPlaceholder}}" ng-model="pageProps.filterValue" ng-keypress="($event.which === 13 ? applyFilters() : 0)">
+      </div>
+    </div>
+    <div class="datefilter-fields">
+      <select class="form-control input-sm" id="dateFilterType" ng-model="dateFilterType">
+        <option value="create_date" selected>Date Created</option>
+        <option value="update_date">Date Updated</option>
+      </select>
+      <label for="startDate">From: </label>
+      <input class="input-sm form-control" type="date" id="startDate" name="startDate" required placeholder="Start Date" ng-model="afterDate" ng-keypress="($event.which === 13 ? applyFilters() : 0)">
+      <label for="endDate"> to: </label>
+      <input class="input-sm form-control" type="date" id="endDate" name="endDate" required placeholder="End Date" ng-model="beforeDate" ng-keypress="($event.which === 13 ? applyFilters() : 0)">
+      &nbsp;
+      <a ng-click="applyFilters()" class="btn btn-primary btn-sm shadowed" ng-disabled="actionButtonStatus">Apply</a>
+      &nbsp;
+      <button ng-click="clearFilters()" class="btn btn-primary btn-sm shadowed" ng-disabled="actionButtonStatus"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+      &nbsp;
+      <a ui-sref="main.createCampaign({method: 'create'})" ng-disabled="userPerms.campaignPerms < 2 || actionButtonStatus" class="btn btn-primary btn-sm shadowed hide-small">New Campaign</a>
+    </div>
+  </div>
+<!-- ==== END Search Bar + Filter Buttons ==== -->
+</div>
+
+<!-- *=*=*=*=*=*=*=*= START Campaign List Pills =*=*=*=*=*=*=*=* -->
+<div id="modlist-pills" class="">
+  <ul class="listview-tab-list" role="tablist">
+    <li role="presentation" class="canvasPill" ng-class="{active: selectedCanvasPill=='AllCamps'}">
+      <a href role="tab" data-toggle="tab" id="tab-allCamps" aria-controls="tab_allCamps" ng-click="selectedCanvasPill='AllCamps';updateUserFilter(selectedCanvasPill)">All Campaigns</a>
+    </li>
+    <!--<li role="presentation" class="canvasPill" ng-class="{active: selectedCanvasPill=='ActiveCamps'}">
+      <a href role="tab" data-toggle="tab" id="tab-activeCamps" aria-controls="tab_activeCamps" ng-click="selectedCanvasPill='ActiveCamps';">Active Campaigns</a>
+    </li>-->
+    <li role="presentation" class="canvasPill" ng-class="{active: selectedCanvasPill=='MyCamps'}">
+      <a href role="tab" data-toggle="tab" id="tab-myCamps" aria-controls="tab_myCamps" ng-click="selectedCanvasPill='MyCamps';updateUserFilter(selectedCanvasPill)">My Campaigns</a>
+    </li>
+    <ul uib-pagination total-items="campaignsCount" max-size="3" first-text="<<" last-text=">>" previous-text="<" next-text=">" boundary-links="true" ng-model="pageProps.currentPage"
+    items-per-page="pageProps.pageSize" ng-change="pageChanged()" class='pageList'></ul>
+        <ui-select ng-change="pageSizeChanged()" ng-model="pageProps.pageSize" theme="select2" class='pageSizeDropdown' search-enabled="false">
+          <ui-select-match>{{$select.selected}}</ui-select-match>
+          <ui-select-choices repeat="opt in pageSizes">
+              <div ng-bind-html="opt"></div></ui-select-choices>
+        </ui-select>
+  </ul>
+
+  <div class="tab-content tabbed-list-content">
+    <!-- ========== All Campaigns ========== -->
+    <div role="tabpanel" class="tab-pane active" id="tabcontent-allCamps" ng-show="selectedCanvasPill=='AllCamps'">
+
+      <p class="listview-result-count text-muted" ng-if="filtered_AllCampaigns.length>0">Showing {{pageStart}} to {{pageStart+(filtered_AllCampaigns.length-1)}} of {{campaignsCount}} total</p>
+      <p class="listview-result-count text-muted" ng-if="filtered_AllCampaigns.length==0">Showing no results</p>
+
+
+      <!-- ########## START All Campaigns Pill ########## -->
+
+<!-- *=*=*=*=*=*=*=*= START Table Layout =*=*=*=*=*=*=*=* -->
+<div id="list"><!-- ng-show="layout=='table'" -->
+  <table class="table table-bordered table-striped listview-table">
+      <thead>
+        <tr>
+          <td ng-show="showColumns.campaign_id">
+            <a href="#" ng-click="sortProp = 'campaign_id'; asc = !asc">
+              ID
+              <span ng-show="sortProp == 'campaign_id' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'campaign_id' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.CCR_Count">
+            <a href="#" ng-click="sortProp = 'CCR_Count'; asc = !asc">
+              Rows
+              <span ng-show="sortProp == 'CCR_Count' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'CCR_Count' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.campaign_name">
+            <a href="#" ng-click="sortProp = 'campaign_name'; asc = !asc">
+              Campaign Name
+              <span ng-show="sortProp == 'campaign_name' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'campaign_name' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.create_date">
+            <a href="#" ng-click="sortProp = 'create_date'; asc = !asc">
+            Date Created
+              <span ng-show="sortProp == 'create_date' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'create_date' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.author">
+            <a href="#" ng-click="sortProp = 'author'; asc = !asc">
+            Created&nbsp;By
+              <span ng-show="sortProp == 'author' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'author' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.update_date">
+            <a href="#" ng-click="sortProp = 'update_date'; asc = !asc">
+            Date Updated
+              <span ng-show="sortProp == 'update_date' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'update_date' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.last_updated_author">
+            <a href="#" ng-click="sortProp = 'last_updated_author'; asc = !asc">
+            Last&nbsp;Updated&nbsp;By
+              <span ng-show="sortProp == 'last_updated_author' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'last_updated_author' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.description">
+            <a href="#" ng-click="sortProp = 'description'; asc = !asc">
+            <!--Original -->Description
+              <span ng-show="sortProp == 'description' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'description' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.owner">
+            <a href="#" ng-click="sortProp = 'owner'; asc = !asc">
+              Campaign owner
+              <span ng-show="sortProp == 'owner' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'owner' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.status_id">
+            <a href="#" ng-click="sortProp = 'status_id'; asc = !asc">
+            Status<!-- NOTE: the actual integer of the status will be used for sorting, not the label alphabetically... hopefully this doesnt confuse users -->
+              <span ng-show="sortProp == 'status_id' && !asc" class="fa fa-caret-down"></span>
+              <span ng-show="sortProp == 'status_id' && asc" class="fa fa-caret-up"></span>
+            </a>
+          </td>
+          <td ng-show="showColumns.action_buttons">
+              <!--Actions--><!-- Action Buttons --><!-- seems kinda weird to display a non-sortable header-->
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="campaign in filtered_AllCampaigns=(campaigns | filter:searchProperties | filter:filterByDate | orderBy:sortProp:asc)">
+
+          <td ng-show="showColumns.campaign_id">
+            {{ campaign.campaign_id }}
+          </td>
+
+          <td ng-show="showColumns.CCR_Count">
+            {{ campaign.CCR_Count }}
+          </td>
+
+          <td ng-show="showColumns.campaign_name">
+            {{ campaign.campaign_name }}
+          </td>
+
+          <td ng-show="showColumns.create_date">
+            {{ campaign.create_date | date:'dd MMM yyyy h:mma':'+0000' }} {{timezone}}
+          </td>
+
+          <td ng-show="showColumns.author">
+            {{ campaign.author }}
+          </td>
+
+          <td ng-show="showColumns.update_date">
+            {{ campaign.update_date | date:'dd MMM yyyy h:mma':'+0000' }} {{timezone}}
+          </td>
+
+          <td ng-show="showColumns.last_updated_author">
+            {{ campaign.last_updated_author }}
+          </td>
+
+          <td ng-show="showColumns.description">
+            {{ campaign.description }}
+          </td>
+
+          <td ng-show="showColumns.owner">
+            {{ campaign.campaignOwner }}
+          </td>
+
+          <td ng-show="showColumns.status_id">
+            {{ campaign.campaign_status_name }}
+          </td>
+
+          <td ng-show="showColumns.action_buttons">
+            <!-- TODO MAYBE: if their ONLY option is view, dont show a dropdown, jsut show a button -->
+            <!-- View always shows, regardless of state -->
+            <!--<a ng-click="goToState('view', module)" class="btn btn-primary btn-xs btn-listview-action">View</a>-->
+            <!-- <a ui-sref="main.campaignBuilder({method: 'view', id: campaign.campaign_id})" class="btn btn-primary btn-xs btn-listview-action view-campaign">View</a> -->
+            <!-- ========== START action button dropdown ========== -->
+            <div class="dropdown action-dropdown">
+              <button class="btn btn-primary dropdown-toggle shadowed" type="button" id="moduleActionsDropdown-{{$index}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-disabled="actionButtonStatus">
+                Actions
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" style="min-width:120px;" aria-labelledby="moduleActionsDropdown">
+                <li ng-if="true">
+                  <a href="#" class="btn-listview-action" ui-sref="main.campaignBuilder({method: 'view', id: campaign.campaign_id})" id='viewCamp-{{$index}}'>View</a>
+                </li>
+
+                <li ng-if="campaign.status_id !== 2 && campaign.status_id !== 6 && campaign.status_id !== 3" ng-hide="userPerms.campaignPerms < 2 || (userPerms.campaignPerms === 2 && campaign.author !== username)">
+                  <a href="#" class="btn-listview-action" ui-sref="main.campaignBuilder({method: 'edit', id: campaign.campaign_id})">Edit</a>
+                </li>
+
+                <li ng-if="campaign.status_id !== 2 && campaign.status_id !== 6 && (userPerms.campaignPerms > 3 || (userPerms.campaignPerms === 3 && campaign.author === username))">
+                  <a href="#" class="btn-listview-action" id="{{campaign.campaign_name}}--delete" ng-click="deleteCampaign(campaign.campaign_id)">Delete</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a href="#" ng-click="openStatusFlow()" class="btn-xs btn-listview-action">Actions Help</a>
+                </li>
+              </ul>
+            </div>
+            <!-- ========== END action button dropdown ========== -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div><!-- /#list -->
+<!-- *=*=*=*=*=*=*=*=* END Table Layout *=*=*=*=*=*=*=*=* -->
+
+
+      <!-- ########## END All Campaigns Pill ########## -->
+
+</div><!-- /#tabcontent-allCamps -->
+    <!-- ========== Active Campaigns ========== -->
+    <div role="tabpanel" class="tab-pane active" id="tabcontent-activeCamps" ng-show="selectedCanvasPill=='MyCamps'">
+
+      <p class="listview-result-count text-muted" ng-if="filtered_MyCampaigns.length>0">Showing {{pageStart}} to {{pageStart+(filtered_MyCampaigns.length-1)}} of {{campaignsCount}} total</p>
+      <p class="listview-result-count text-muted" ng-if="filtered_MyCampaigns.length==0">Showing no results</p>
+
+      <!-- ########## START My Campaigns Pill ########## -->
+      <div id="list">
+        <table class="table table-bordered table-striped listview-table">
+          <thead>
+            <tr>
+              <td ng-show="showColumns.campaign_id">
+                <a href="#" ng-click="sortProp = 'campaign_id'; asc = !asc">
+                  ID
+                  <span ng-show="sortProp == 'campaign_id' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'campaign_id' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.CCR_Count">
+                <a href="#" ng-click="sortProp = 'CCR_Count'; asc = !asc">
+                  Rows
+                  <span ng-show="sortProp == 'CCR_Count' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'CCR_Count' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.campaign_name">
+                <a href="#" ng-click="sortProp = 'campaign_name'; asc = !asc">
+                  Campaign Name
+                  <span ng-show="sortProp == 'campaign_name' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'campaign_name' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.create_date">
+                <a href="#" ng-click="sortProp = 'create_date'; asc = !asc">
+                Date Created
+                  <span ng-show="sortProp == 'create_date' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'create_date' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.author">
+                <a href="#" ng-click="sortProp = 'author'; asc = !asc">
+                Created&nbsp;By
+                  <span ng-show="sortProp == 'author' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'author' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.update_date">
+                <a href="#" ng-click="sortProp = 'update_date'; asc = !asc">
+                Date Updated
+                  <span ng-show="sortProp == 'update_date' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'update_date' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.last_updated_author">
+                <a href="#" ng-click="sortProp = 'last_updated_author'; asc = !asc">
+                Last&nbsp;Updated&nbsp;By
+                  <span ng-show="sortProp == 'last_updated_author' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'last_updated_author' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.description">
+                <a href="#" ng-click="sortProp = 'description'; asc = !asc">
+                <!--Original -->Description
+                  <span ng-show="sortProp == 'description' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'description' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.owner">
+                <a href="#" ng-click="sortProp = 'owner'; asc = !asc">
+                  Campaign owner
+                  <span ng-show="sortProp == 'owner' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'owner' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.status_id">
+                <a href="#" ng-click="sortProp = 'status_id'; asc = !asc">
+                Status<!-- NOTE: the actual integer of the status will be used for sorting, not the label alphabetically... hopefully this doesnt confuse users -->
+                  <span ng-show="sortProp == 'status_id' && !asc" class="fa fa-caret-down"></span>
+                  <span ng-show="sortProp == 'status_id' && asc" class="fa fa-caret-up"></span>
+                </a>
+              </td>
+              <td ng-show="showColumns.action_buttons">
+                  <!--Actions--><!-- Action Buttons --><!-- seems kinda weird to display a non-sortable header-->
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="campaign in filtered_MyCampaigns=(campaigns | filter:searchProperties | filter:{author: username} | filter:filterByDate | orderBy:sortProp:asc)">
+
+              <td ng-show="showColumns.campaign_id">
+                {{ campaign.campaign_id }}
+              </td>
+
+              <td ng-show="showColumns.CCR_Count">
+                {{ campaign.CCR_Count }}
+              </td>
+
+              <td ng-show="showColumns.campaign_name">
+                {{ campaign.campaign_name }}
+              </td>
+
+              <td ng-show="showColumns.create_date">
+                {{ campaign.create_date | date:'dd MMM yyyy h:mma':'+0000' }} {{timezone}}
+              </td>
+
+              <td ng-show="showColumns.author">
+                {{ campaign.author }}
+              </td>
+
+              <td ng-show="showColumns.update_date">
+                {{ campaign.update_date | date:'dd MMM yyyy h:mma':'+0000' }} {{timezone}}
+              </td>
+
+              <td ng-show="showColumns.last_updated_author">
+                {{ campaign.last_updated_author }}
+              </td>
+
+              <td ng-show="showColumns.description">
+                {{ campaign.description }}
+              </td>
+
+              <td ng-show="showColumns.owner">
+                {{ campaign.campaignOwner }}
+              </td>
+
+              <td ng-show="showColumns.status_id">
+                {{ campaign.campaign_status_name }}
+              </td>
+
+              <td ng-show="showColumns.action_buttons">
+                <!-- TODO MAYBE: if their ONLY option is view, dont show a dropdown, jsut show a button -->
+                <!-- View always shows, regardless of state -->
+                <!--<a ng-click="goToState('view', module)" class="btn btn-primary btn-xs btn-listview-action">View</a>-->
+                <!-- <a ui-sref="main.campaignBuilder({method: 'view', id: campaign.campaign_id})" class="btn btn-primary btn-xs btn-listview-action view-campaign">View</a> -->
+                <!-- ========== START action button dropdown ========== -->
+                <div class="dropdown action-dropdown">
+              <button class="btn btn-primary dropdown-toggle shadowed" type="button" id="moduleActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-disabled="actionButtonStatus">
+                Actions
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" style="min-width:120px;" aria-labelledby="moduleActionsDropdown">
+                <li ng-if="true">
+                  <a href="#" class="btn-listview-action" ui-sref="main.campaignBuilder({method: 'view', id: campaign.campaign_id})">View</a>
+                </li>
+
+                <li ng-if="campaign.status_id !== 2 && campaign.status_id !== 6 && campaign.status_id !== 3" ng-hide="userPerms.campaignPerms < 2 || (userPerms.campaignPerms === 2 && campaign.author !== username)">
+                  <a href="#" class="btn-listview-action" ui-sref="main.campaignBuilder({method: 'edit', id: campaign.campaign_id})">Edit</a>
+                </li>
+
+                <li ng-if="campaign.status_id !== 2 && campaign.status_id !== 6 && (userPerms.campaignPerms > 3 || (userPerms.campaignPerms === 3 && campaign.author === username))">
+                  <a href="#" class="btn-listview-action" id="{{campaign.campaign_name}}--delete" ng-click="deleteCampaign(campaign.campaign_id)">Delete</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a href="#" ng-click="openStatusFlow()" class="btn-xs btn-listview-action">Actions Help</a>
+                </li>
+              </ul>
+            </div>
+                <!-- ========== END action button dropdown ========== -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- /#list -->
+      <!-- ########## END My Campaigns Pill ########## -->
+    </div><!-- /#tabcontent-myCamps -->
+  </div>
+</div><!-- /#modlist-pills -->
+<!-- *=*=*=*=*=*=*=*=* END Campaign List Pills *=*=*=*=*=*=*=*=* -->
+
+
+
+</div></div><!-- /div, not .row --><!--/.listview-container -->
